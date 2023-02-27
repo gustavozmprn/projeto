@@ -1,0 +1,69 @@
+
+<!-- Página de template de exemplo -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+<!-- Indica-se importar scripts Javascript e arquivos CSS externos dentro do head de um template -->
+<h:head>
+	<!-- Nome que aparecerá na aba do navegador para o usuário -->
+    <title>projeto</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"/>
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet"/>
+    <h:outputStylesheet name ="css/sb-admin-2.min.css"/>
+    <h:outputStylesheet name ="vendor/fontawesome-free/css/all.min.css"/>
+</h:head>
+<h:body id = "page-top">
+	<div id="wrapper">
+  		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_categorias.xhtml">
+               <i class="fas fa-fw fa-tachometer-alt"></i>
+               <span>Categorias</span></a>
+         		</li>
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_produtos.xhtml">
+               <i class="fas fa-fw fa-tachometer-alt"></i>
+               <span>Produtos</span></a>
+         		</li>
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_funcionarios.xhtml">
+               <i class="fas fa-fw fa-tachometer-alt"></i>
+               <span>Funcionarios</span></a>
+         		</li>
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_clientes.xhtml">
+               <i class="fas fa-fw fa-tachometer-alt"></i>
+               <span>Clientes</span></a>
+         		</li>
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_tarefas.xhtml">
+               <i class="fas fa-fw fa-tachometer-alt"></i>
+               <span>Lista de Tarefas</span></a>
+         		</li>
+  		</ul>
+    	<div id = "content-wrapper" class="d-flex flex-column">
+    		<div id='content'>
+		    	<div class="container-fluid">
+			        <ui:insert name="content">
+			       	</ui:insert>
+		      	</div>
+	     	</div>
+      	</div>
+      <div id="footer">
+          <p>
+          	<h:form>
+               <h:panelGrid columns="2">
+                   <h:commandButton value="Logout" action="#{loginController.logout}"/>
+               </h:panelGrid>
+              </h:form>
+          </p>
+      </div>
+    </div>  
+</h:body>
+</html>
