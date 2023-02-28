@@ -1,5 +1,6 @@
 package br.edu.projeto.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.PrimeFaces;
 
 import br.edu.projeto.dao.CategoriaProdutoDAO;
 import br.edu.projeto.model.CategoriaProduto;
@@ -24,7 +27,13 @@ public class CategoriaProdutoController implements Serializable{
 	private List<CategoriaProduto> listaCategoriasProdutos;
 	
 	@PostConstruct
+	
 	public void inicializarCategoriaProduto() {
+    	if (!this.facesContext.getExternalContext().isUserInRole("ADMINISTRADOR") && !this.facesContext.getExternalContext().isUserInRole("NORMAL")) {
+    		try {
+				this.facesContext.getExternalContext().redirect("login-error.xhtml");
+			} catch (IOException e) {e.printStackTrace();}
+    	}
 		novaCategoriaProduto = new CategoriaProduto();
 		listaCategoriasProdutos = categoriaProdutoDAO.listarTodos();
 	}
@@ -49,7 +58,9 @@ public class CategoriaProdutoController implements Serializable{
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Já existe uma categoria com esse nome cadastrada"));
 			}
-			inicializarCategoriaProduto();
+			listaCategoriasProdutos = categoriaProdutoDAO.listarTodos();
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
@@ -65,7 +76,9 @@ public class CategoriaProdutoController implements Serializable{
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não existe categoria com esse nome cadastrada"));
 			}
-			inicializarCategoriaProduto();
+			listaCategoriasProdutos = categoriaProdutoDAO.listarTodos();
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
@@ -82,7 +95,9 @@ public class CategoriaProdutoController implements Serializable{
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não existe categoria com esse nome cadastrada"));
 			}
-			inicializarCategoriaProduto();
+			listaCategoriasProdutos = categoriaProdutoDAO.listarTodos();
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");

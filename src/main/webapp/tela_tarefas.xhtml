@@ -19,71 +19,139 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:p="http://primefaces.org/ui"
-    template="/WEB-INF/templates/template-tarefas.xhtml">
+    template="/WEB-INF/templates/default.xhtml">
     <ui:define name="content">
+    	<div class = "container-fluid">
+			<h:form id="dialogs">
+	        	<p:growl id="messages"/>
+		        <p:dialog header="Nova Tarefa" showEffect="fade" modal="true" widgetVar="usuarioDialog" responsive="true">   
+		            <p:outputPanel id="usuario-conteudo-dialog" class="ui-fluid">
+		                <p:outputPanel rendered="#{not empty listaTarefaController.novaListaTarefa}">
+		                    <div class="field">
+		                        <p:outputLabel for="nome">Nome</p:outputLabel>
+		                        <p:inputText id="nome" value="#{listaTarefaController.novaListaTarefa.nome}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="func">Funcionário Responsavel</p:outputLabel>
+		                        <p:selectOneMenu id ="func" value = "#{listaTarefaController.novaListaTarefa.fusername}">
+		                        	<f:selectItems value="#{funcionarioController.listaFuncionarios}" var = "f" itemLabel = "#{f.nome}" itemValue="#{f.username}" />
+		                        </p:selectOneMenu>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="descr">Descrição</p:outputLabel>
+		                        <p:inputText id="descr" value="#{listaTarefaController.novaListaTarefa.desricao}" required="true"/>
+		                    </div>
+		                </p:outputPanel>
+		            </p:outputPanel>
+		
+		            <f:facet name="footer">
+	                	<p:commandButton value="Atualizar" icon="pi pi-pencil" actionListener="#{listaTarefaController.update()}"
+	                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cadastrar" icon="pi pi-check" actionListener="#{listaTarefaController.register()}"
+		                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('usuarioDialog').hide()" class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>
+		        <p:confirmDialog widgetVar="removerUsuarioDialog" showEffect="fade" width="300"
+		            message="Desejar remover essa categoria?" header="Confirm" severity="warn">
+		            <p:commandButton value="Sim" icon="pi pi-check" actionListener="#{listaTarefaController.delete}"
+		                process="@this" oncomplete="PF('removerUsuarioDialog').hide()" update="dt-usuarios" />
+		            <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('removerUsuarioDialog').hide()" />
+		        </p:confirmDialog>
+	        </h:form>
+        <div class = "container-fluid">
+	        <h:form id="reg">
+	            <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{listaTarefaController.cadastrarTarefa}"
+	                update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('usuarioDialog').show()"
+	                styleClass="ui-button-success" style="margin-right: .5rem">
+	                <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	            </p:commandButton>
+    	<!--
         <h:form id="reg">
             <h2>Member Registration</h2>
             <p>Enforces annotation-based constraints defined on the
                 model class.</p>
-            <h:panelGrid columns="3" columnClasses="titleCell">                
-                <h:outputLabel for="nome" value="Nome:" />
-                <h:inputText id="nome" value="#{listaTarefaController.novaListaTarefa.nome}" />
-                <h:message for="nome" errorClass="invalid" />
-		        
-                <h:outputLabel for="descr" value="Descrição: " />
-                <h:inputText id="descr" value="#{listaTarefaController.novaListaTarefa.desricao}" />
-                <h:message for="descr" errorClass="invalid" />
-  
-  				<h:outputLabel for="fuser" value="Funcionario Responsavel:" />
-                <h:inputText id="fuser" value="#{listaTarefaController.novaListaTarefa.fusername}" />
-                <h:message for="fuser" errorClass="invalid" />
+            <h:panelGrid columns="3" columnClasses="titleCell">
                 
-                <p:outputLabel for="dtinit" value="Data Inicio:" />
-		        <p:datePicker id="dtinit" value="#{listaTarefaController.novaListaTarefa.data_inicio}" />
-		        <p:message for="dtinit" errorClass="invalid"/>
-            </h:panelGrid>
-            
+                <h:outputLabel for="nome" value="Nome:" />
+                <h:inputText id="nome" value="#{categoriaProdutoController.novaCategoriaProduto.nome}" />
+                <h:message for="nome" errorClass="invalid" />
 
+				<h:outputLabel for="descr" value="Descrição:" />
+                <h:inputText id="descr" value="#{categoriaProdutoController.novaCategoriaProduto.descricao}" />
+                <h:message for="descr" errorClass="invalid" />
+            </h:panelGrid>
+		-->
             <p>
                 <h:panelGrid columns="2">
                     <h:commandButton id="register"
                         action="#{listaTarefaController.register()}"
-                        value="Register" styleClass="register" />
+                        value="Register" styleClass="register" style = "display:none" />
                     <h:messages styleClass="messages"
                         errorClass="invalid" infoClass="valid"
                         warnClass="warning" globalOnly="true" />
                 </h:panelGrid>
             </p>
+            </h:form>
+			<div class="card shadow mb-4">
+ 		        <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Tarefas</h6>
+                </div>
+		        <div class = "table-responsive">
+					<p:dataTable id="dt-usuarios" widgetVar="dtUsuarios" var="us" value="#{listaTarefaController.listaDeTarefas}" reflow="true" rows="5" paginator="true">
+				            <f:facet name="header">
+				            </f:facet>
+				            <p:column headerText="Número" sortBy="#{us.num_tarefa}">
+				                <h:outputText value="#{us.num_tarefa}" />
+				            </p:column>
+				            <p:column headerText="Nome" sortBy="#{us.nome}">
+				                <h:outputText value="#{us.nome}" />
+				            </p:column>
+				            <p:column headerText="Descrição">
+				                <h:outputText value="#{us.desricao}" />
+				            </p:column>
+				            <p:column headerText="Funcionario">
+				                <h:outputText value="#{us.fusername}" />
+				            </p:column>
+				            <p:column headerText="Data Inicio">
+				                <h:outputText value="#{us.data_inicio}" />
+				            </p:column>
+				            <p:column>
+           		                <p:commandButton icon="pi pi-pencil" update=":dialogs:usuario-conteudo-dialog" 
+	                    			oncomplete="PF('usuarioDialog').show()" action="#{listaTarefaController.update}"
+	                    			styleClass="edit-button rounded-button ui-button-success" process="@this">
+	                   				<f:setPropertyActionListener value="#{us}" target="#{listaTarefaController.novaListaTarefa}" />
+	                    			<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	                			</p:commandButton>
+	                			<p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+	                                 process="@this" oncomplete="PF('removerUsuarioDialog').show()">
+	                    			<f:setPropertyActionListener value="#{us}" target="#{listaTarefaController.novaListaTarefa}" />
+	                			</p:commandButton>
+				            </p:column>
+				     </p:dataTable>
+			    </div>
+		    </div>
+        <!--
         </h:form>
          
-        <h2>Tarefas</h2>
-        <h:panelGroup rendered="#{empty listaTarefaControllerlListaDeTarefas}">
-            <em>Sem Tarefas registrados</em>
+        <h2>Categorias de Produtos</h2>
+        <h:panelGroup rendered="#{empty categoriaProdutoController.listaCategoriasProdutos}">
+            <em>Sem categorias registrados</em>
         </h:panelGroup>
-        <h:dataTable var="listaTarefa" value="#{listaTarefaController.listaDeTarefas}"
-            rendered="#{not empty listaTarefaController.listaDeTarefas}"
+        <h:dataTable var="categoriaProduto" value="#{categoriaProdutoController.listaCategoriasProdutos}"
+            rendered="#{not empty categoriaProdutoController.listaCategoriasProdutos}"
             styleClass="simpletablestyle">
             <h:column>
-                <f:facet name="header">Descrição</f:facet>
-                #{listaTarefa.num_tarefa}
-            </h:column>
-            <h:column>
                 <f:facet name="header">Nome</f:facet>
-                #{listaTarefa.nome}
+                #{categoriaProduto.nome}
             </h:column>
             <h:column>
-                <f:facet name="header">Categoria</f:facet>
-                #{listaTarefa.desricao}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Preço</f:facet>
-                #{listaTarefa.data_inicio}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Quantidade</f:facet>
-                #{listaTarefa.fusername}
+                <f:facet name="header">Descrição</f:facet>
+                #{categoriaProduto.descricao}
             </h:column>
        	</h:dataTable>
-        
+         -->
+         </div>
+         </div>
     </ui:define>
 </ui:composition>

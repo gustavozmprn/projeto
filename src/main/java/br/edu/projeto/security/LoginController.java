@@ -17,6 +17,7 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.edu.projeto.model.Funcionario;
 import br.edu.projeto.model.Usuario;
 
 //Controlador da página de Login
@@ -30,11 +31,11 @@ public class LoginController {
     @Inject
     private SecurityContext securityContext;
 
-    private Usuario usuario;
+    private Funcionario usuario;
 
     @PostConstruct
     public void inicializarUsuario() {
-        usuario = new Usuario();
+        usuario = new Funcionario();
     }
 
     public void login() throws IOException{
@@ -45,15 +46,15 @@ public class LoginController {
                 facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existe um usuário autenticado! Use a opção logout primeiro.", ""));
             }
     	} else {
-	    	Credential credential = new UsernamePasswordCredential(usuario.getUsuario(), new Password(usuario.getSenha()));
+	    	Credential credential = new UsernamePasswordCredential(usuario.getUsername(), new Password(usuario.getSenha()));
 	    	AuthenticationStatus status = securityContext.authenticate(
 	    	        	(HttpServletRequest)facesContext.getExternalContext().getRequest(),
 	    	        	(HttpServletResponse)facesContext.getExternalContext().getResponse(),
 	    	            AuthenticationParameters.withParams().credential(credential));
 	    	if (status.equals(AuthenticationStatus.SUCCESS))
-	    		facesContext.getExternalContext().redirect("cadastro_usuario.xhtml");
+	    		facesContext.getExternalContext().redirect("tela_categorias.xhtml");
 	    	else if (status.equals(AuthenticationStatus.SEND_FAILURE)) {
-	    		usuario = new Usuario();
+	    		usuario = new Funcionario();
 	    		try {
 	            	throw new Exception();       	
 	            } catch (Exception e) {
@@ -68,11 +69,11 @@ public class LoginController {
     	facesContext.getExternalContext().redirect("logout.xhtml");
     }
     
-	public Usuario getUsuario() {
+	public Funcionario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(Funcionario usuario) {
 		this.usuario = usuario;
 	}
 }

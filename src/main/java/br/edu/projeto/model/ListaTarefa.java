@@ -33,7 +33,7 @@ public class ListaTarefa {
 	@Size(min = 3, max = 100, message =  "A descrição deve conter entre 3 e 100 caracteres!!!")
 	private String descricao;
 	
-	@NotNull
+	
 	private Date data_inicio;
 
 	public Integer getNum_tarefa() {

@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
@@ -19,7 +20,6 @@ import org.hibernate.validator.constraints.br.CPF;
 public class Servico {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer num_servico;
 	
 	@NotNull
@@ -34,20 +34,13 @@ public class Servico {
 	private String fusername;
 	
 	@NotNull
-	@PositiveOrZero
+	@Positive
 	private Float horas_trb;
 	
 	@NotNull
-	@PositiveOrZero
-	private Float preco_produtos;
-	
-	@NotNull
-	@PositiveOrZero
+	@Positive
 	private Float preco_mobra;
 	
-	@NotNull
-	@PositiveOrZero
-	private Float preco_total;
 	
 	public Integer getNum_servico() {
 		return num_servico;
@@ -81,14 +74,6 @@ public class Servico {
 		this.horas_trb = horas_trb;
 	}
 
-	public Float getPreco_produtos() {
-		return preco_produtos;
-	}
-
-	public void setPreco_produtos(Float preco_produtos) {
-		this.preco_produtos = preco_produtos;
-	}
-
 	public Float getPreco_mobra() {
 		return preco_mobra;
 	}
@@ -97,12 +82,5 @@ public class Servico {
 		this.preco_mobra = preco_mobra;
 	}
 
-	public Float getPreco_total() {
-		return preco_total;
-	}
-
-	public void setPreco_total(Float preco_total) {
-		this.preco_total = preco_total;
-	}
 	
 }

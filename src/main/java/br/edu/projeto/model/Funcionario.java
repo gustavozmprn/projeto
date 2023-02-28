@@ -62,7 +62,7 @@ public class Funcionario {
 	@Size(max = 60)
 	private String descricao;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
     	      name = "permissoes",
     	      joinColumns = @JoinColumn(name = "func_user"),

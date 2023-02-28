@@ -1,6 +1,7 @@
 package br.edu.projeto.controller;
 
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -10,6 +11,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.PrimeFaces;
+
 import br.edu.projeto.dao.ProdutoDAO;
 import br.edu.projeto.model.Produto;
 
@@ -26,6 +30,11 @@ public class ProdutoController implements Serializable{
 	
 	@PostConstruct
 	public void inicializarProduto() {
+    	if (!this.facesContext.getExternalContext().isUserInRole("ADMINISTRADOR") && !this.facesContext.getExternalContext().isUserInRole("NORMAL")) {
+    		try {
+				this.facesContext.getExternalContext().redirect("login-error.xhtml");
+			} catch (IOException e) {e.printStackTrace();}
+    	}
 		novoProduto = new Produto();
 		listaProdutos = produtoDAO.listarTodos();
 	}
@@ -50,7 +59,9 @@ public class ProdutoController implements Serializable{
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Já existe um produto com esse código cadastrado"));
 			}
-			inicializarProduto();
+			listaProdutos = produtoDAO.listarTodos();
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
         }
 		catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
@@ -70,7 +81,9 @@ public class ProdutoController implements Serializable{
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não existe produto com esse código cadastrado"));
 			}
-			inicializarProduto();
+		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
+			listaProdutos = produtoDAO.listarTodos();
         }
 		catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
@@ -87,6 +100,9 @@ public class ProdutoController implements Serializable{
 				produtoDAO.excluir(novoProduto);
 	            facesContext.addMessage(null, new FacesMessage("Produto Deletado"));
 	            novoProduto=null;
+	            listaProdutos = produtoDAO.listarTodos();
+			    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+			    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não existe produto com esse código cadastrado"));
 			}

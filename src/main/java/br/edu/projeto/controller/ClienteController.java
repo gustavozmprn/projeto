@@ -1,5 +1,6 @@
 package br.edu.projeto.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class ClienteController implements Serializable{
 	
 	@PostConstruct
 	public void inicializarCliente() {
+    	if (!this.facesContext.getExternalContext().isUserInRole("ADMINISTRADOR") && !this.facesContext.getExternalContext().isUserInRole("NORMAL")) {
+    		try {
+				this.facesContext.getExternalContext().redirect("login-error.xhtml");
+			} catch (IOException e) {e.printStackTrace();}
+    	}
 		novoCliente = new Cliente();
 		listaClientes = clienteDAO.listarTodos();
 	}
@@ -54,7 +60,7 @@ public class ClienteController implements Serializable{
 				}else {
 					facesContext.addMessage(null, new FacesMessage("Já há um cliente com esse cpf cadastrado"));
 				}
-				inicializarCliente();
+				listaClientes = clienteDAO.listarTodos();
 			    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
 			    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 	        } catch (Exception e) {
@@ -69,11 +75,11 @@ public class ClienteController implements Serializable{
 	try {
 			if (clienteDAO.clienteExiste(clienteDAO.findByCpf(novoCliente))) {
 				clienteDAO.atualizar(novoCliente);
-				inicializarCliente();
 				facesContext.addMessage(null, new FacesMessage("Cliente Atualizado"));
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não há cliente com esse cpf cadastrado"));
 			}
+			listaClientes = clienteDAO.listarTodos();
 		    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
 		    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 		}catch (Exception e) {
@@ -86,7 +92,7 @@ public class ClienteController implements Serializable{
 			if (clienteDAO.clienteExiste(clienteDAO.findByCpf(novoCliente))) {
 				clienteDAO.excluir(novoCliente);
 				novoCliente = null;
-				inicializarCliente();
+				listaClientes = clienteDAO.listarTodos();
 				facesContext.addMessage(null, new FacesMessage("Cliente Excluído"));
 			}else {
 				facesContext.addMessage(null, new FacesMessage("Não há cliente com esse cpf cadastrado"));

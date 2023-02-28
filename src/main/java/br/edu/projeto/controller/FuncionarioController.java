@@ -1,5 +1,6 @@
 package br.edu.projeto.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,11 @@ public class FuncionarioController implements Serializable {
 	
 	@PostConstruct
 	public void inicializarFuncionario() {
+    	if (!this.facesContext.getExternalContext().isUserInRole("ADMINISTRADOR")) {
+    		try {
+				this.facesContext.getExternalContext().redirect("login-error.xhtml");
+			} catch (IOException e) {e.printStackTrace();}
+    	}
 		permissoesSelecionadas = new ArrayList<Integer>();
 		listaFuncionarios = funcionarioDAO.listarTodos();
 		permissoes = new ArrayList<SelectItem>();
@@ -108,7 +114,10 @@ public class FuncionarioController implements Serializable {
 			try {
 					funcionarioDAO.excluir(novoFuncionario);
 					listaFuncionarios = funcionarioDAO.listarTodos();
+					facesContext.addMessage(null, new FacesMessage("Funcionário Deletado"));
 					this.novoFuncionario = null;
+				    PrimeFaces.current().executeScript("PF('usuarioDialog').hide()");
+				    PrimeFaces.current().ajax().update("form:messages", "form:dt-usuarios");
 			}catch (Exception e) {
 				String errorMessage = getRootErrorMessage(e);
 				this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));

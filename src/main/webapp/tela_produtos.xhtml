@@ -21,81 +21,149 @@
     xmlns:p="http://primefaces.org/ui"
     template="/WEB-INF/templates/default.xhtml">
     <ui:define name="content">
-    
+    	<div class = "container-fluid">
+			<h:form id="dialogs">
+	        	<p:growl id="messages"/>
+		        <p:dialog header="Novo Produto" showEffect="fade" modal="true" widgetVar="usuarioDialog" responsive="true">   
+		            <p:outputPanel id="usuario-conteudo-dialog" class="ui-fluid">
+		                <p:outputPanel rendered="#{not empty categoriaProdutoController.novaCategoriaProduto}">
+		                    <div class="field">
+		                        <p:outputLabel for="cdg">Codigo</p:outputLabel>
+		                        <p:inputText id="cdg" value="#{produtoController.novoProduto.codigo}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="nome">Nome</p:outputLabel>
+		                        <p:inputText id="nome" value="#{produtoController.novoProduto.nome}" required="true"/>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="preco">Preço</p:outputLabel>
+		                        <p:inputText id="preco" value="#{produtoController.novoProduto.preco}" required="true"/>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="qtd">Quantidade em Estoque</p:outputLabel>
+		                        <p:inputText id="qtd" value="#{produtoController.novoProduto.quantidade}" required="true"/>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="categoria">Categoria</p:outputLabel>
+		                        <p:selectOneMenu id ="categoria" value = "#{produtoController.novoProduto.categoria}">
+		                        	<f:selectItems value="#{categoriaProdutoController.listaCategoriasProdutos}" var = "c" itemLabel = "#{c.nome}" itemValue="#{c.nome}" />
+		                        </p:selectOneMenu>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="descr">Descrição</p:outputLabel>
+		                        <p:inputText id="descr" value="#{produtoController.novoProduto.descr}" required="true"/>
+		                    </div>
+		                </p:outputPanel>
+		            </p:outputPanel>
+		            <f:facet name="footer">
+	                	<p:commandButton value="Atualizar" icon="pi pi-pencil" actionListener="#{produtoController.update()}"
+	                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cadastrar" icon="pi pi-check" actionListener="#{produtoController.register()}"
+		                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('usuarioDialog').hide()" class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>
+		        <p:confirmDialog widgetVar="removerUsuarioDialog" showEffect="fade" width="300"
+		            message="Desejar remover essa categoria?" header="Confirm" severity="warn">
+		            <p:commandButton value="Sim" icon="pi pi-check" actionListener="#{produtoController.delete}"
+		                process="@this" oncomplete="PF('removerUsuarioDialog').hide()" update="dt-usuarios" />
+		            <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('removerUsuarioDialog').hide()" />
+		        </p:confirmDialog>
+	        </h:form>
+        <div class = "container-fluid">
+	        <h:form id="reg">
+	            <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{produtoController.cadastrarProduto}"
+	                update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('usuarioDialog').show()"
+	                styleClass="ui-button-success" style="margin-right: .5rem">
+	                <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	            </p:commandButton>
+    	<!--
         <h:form id="reg">
             <h2>Member Registration</h2>
             <p>Enforces annotation-based constraints defined on the
                 model class.</p>
             <h:panelGrid columns="3" columnClasses="titleCell">
-                <h:outputLabel for="codigo" value="Codigo:" />
-                <h:inputText id="codigo" value="#{produtoController.novoProduto.codigo}" />
-                <h:message for="codigo" errorClass="invalid" />
                 
                 <h:outputLabel for="nome" value="Nome:" />
-                <h:inputText id="nome" value="#{produtoController.novoProduto.nome}" />
+                <h:inputText id="nome" value="#{categoriaProdutoController.novaCategoriaProduto.nome}" />
                 <h:message for="nome" errorClass="invalid" />
-                
-                <h:outputLabel for="categoria" value="Cateogria: " />
-                <h:inputText id="categoria" value="#{produtoController.novoProduto.categoria}" />
-                <h:message for="categoria" errorClass="invalid" />
-                
-				<h:outputLabel for="preco" value="Preco:" />
-                <h:inputText id="preco" value="#{produtoController.novoProduto.preco}" />
-                <h:message for="preco" errorClass="invalid" />
-  
-  				<h:outputLabel for="quantidade" value="Quantidade:" />
-                <h:inputText id="quantidade" value="#{produtoController.novoProduto.quantidade}" />
-                <h:message for="quantidade" errorClass="invalid" />
-				
+
 				<h:outputLabel for="descr" value="Descrição:" />
-                <h:inputText id="descr" value="#{produtoController.novoProduto.descr}" />
+                <h:inputText id="descr" value="#{categoriaProdutoController.novaCategoriaProduto.descricao}" />
                 <h:message for="descr" errorClass="invalid" />
             </h:panelGrid>
-
+		-->
             <p>
                 <h:panelGrid columns="2">
                     <h:commandButton id="register"
                         action="#{produtoController.register()}"
-                        value="Register" styleClass="register" />
+                        value="Register" styleClass="register" style = "display:none" />
                     <h:messages styleClass="messages"
                         errorClass="invalid" infoClass="valid"
                         warnClass="warning" globalOnly="true" />
                 </h:panelGrid>
             </p>
+            </h:form>
+			<div class="card shadow mb-4">
+ 		        <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Produtos</h6>
+                </div>
+		        <div class = "table-responsive">
+					<p:dataTable id="dt-usuarios" widgetVar="dtUsuarios" var="us" value="#{produtoController.listaProdutos}" reflow="true" rows="5" paginator="true">
+				            <p:column headerText="Codigo" sortBy="#{us.codigo}">
+				                <h:outputText value="#{us.codigo}" />
+				            </p:column>
+				            <p:column headerText="Nome">
+				                <h:outputText value="#{us.nome}" />
+				            </p:column>
+				            <p:column headerText="Categoria">
+				                <h:outputText value="#{us.categoria}" />
+				            </p:column>
+				            <p:column headerText="Preço">
+				                <h:outputText value="R$#{us.preco}" />
+				            </p:column>
+				            <p:column headerText="Quantidade">
+				                <h:outputText value="#{us.quantidade}" />
+				            </p:column>
+				            <p:column headerText="Descrição">
+				                <h:outputText value="#{us.descr}" />
+				            </p:column>
+				            <p:column>
+           		                <p:commandButton icon="pi pi-pencil" update=":dialogs:usuario-conteudo-dialog" 
+	                    			oncomplete="PF('usuarioDialog').show()" action="#{produtoController.update}"
+	                    			styleClass="edit-button rounded-button ui-button-success" process="@this">
+	                   				<f:setPropertyActionListener value="#{us}" target="#{produtoController.novoProduto}" />
+	                    			<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	                			</p:commandButton>
+	                			<p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+	                                 process="@this" oncomplete="PF('removerUsuarioDialog').show()">
+	                    			<f:setPropertyActionListener value="#{us}" target="#{produtoController.novoProduto}" />
+	                			</p:commandButton>
+				            </p:column>
+				     </p:dataTable>
+			    </div>
+		    </div>
+        <!--
         </h:form>
          
-        <h2>Produtos</h2>
-        <h:panelGroup rendered="#{empty produtoController.listaProdutos}">
-            <em>Sem produtos registrados</em>
+        <h2>Categorias de Produtos</h2>
+        <h:panelGroup rendered="#{empty categoriaProdutoController.listaCategoriasProdutos}">
+            <em>Sem categorias registrados</em>
         </h:panelGroup>
-        <h:dataTable var="produto" value="#{produtoController.listaProdutos}"
-            rendered="#{not empty produtoController.listaProdutos}"
+        <h:dataTable var="categoriaProduto" value="#{categoriaProdutoController.listaCategoriasProdutos}"
+            rendered="#{not empty categoriaProdutoController.listaCategoriasProdutos}"
             styleClass="simpletablestyle">
             <h:column>
-                <f:facet name="header">Código</f:facet>
-                #{produto.codigo}
-            </h:column>
-            <h:column>
                 <f:facet name="header">Nome</f:facet>
-                #{produto.nome}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Categoria</f:facet>
-                #{produto.categoria}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Preço</f:facet>
-                #{produto.preco}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Quantidade</f:facet>
-                #{produto.quantidade}
+                #{categoriaProduto.nome}
             </h:column>
             <h:column>
                 <f:facet name="header">Descrição</f:facet>
-                #{produto.descr}
+                #{categoriaProduto.descricao}
             </h:column>
        	</h:dataTable>
-        
+         -->
+         </div>
+         </div>
     </ui:define>
 </ui:composition>

@@ -19,14 +19,11 @@ public class CategoriaProduto {
 	private String nome;
 	
 	@NotNull
-	private Integer qtd_itens;
-	
-	@NotNull
 	@Column (name = "descr")
 	@Size (min = 3, max = 40)
 	private String descricao;
 	
-	@Size (min = 3, max = 15)
+	@Size (max = 15)
 	private String categoriamae;
 
 	public String getNome() {
@@ -35,14 +32,6 @@ public class CategoriaProduto {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Integer getQtd_itens() {
-		return qtd_itens;
-	}
-
-	public void setQtd_itens(Integer qtd_itens) {
-		this.qtd_itens = qtd_itens;
 	}
 
 	public String getDescricao() {
@@ -58,6 +47,9 @@ public class CategoriaProduto {
 	}
 
 	public void setCategoriamae(String categoriamae) {
+		if (categoriamae.isBlank() || categoriamae.isEmpty() || categoriamae.length() == 0) {
+			categoriamae = null;
+		}
 		this.categoriamae = categoriamae;
 	}
 	

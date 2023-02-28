@@ -24,7 +24,7 @@
   		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 	    	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                    <i class="fas fa-fw fa-lightbulb"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">Sistema<sup></sup></div>
             </a>
@@ -42,7 +42,7 @@
          	<hr class="sidebar-divider"/>
   		    <li class="nav-item active">
                <a class="nav-link" href="tela_funcionarios.xhtml">
-               <i class="fas fa-fw fa-user-alt"></i>
+               <i class="fas fa-fw fa-user"></i>
                <span>Funcionarios</span></a>
          	</li>
   		    <li class="nav-item active">
@@ -56,6 +56,14 @@
                <i class="fas fa-fw fa-calendar-alt"></i>
                <span>Lista de Tarefas</span></a>
          	</li>
+  		    <li class="nav-item active">
+               <a class="nav-link" href="tela_servicos.xhtml">
+               <i class="fas fa-fw fa-shopping-bag"></i>
+               <span>Serviços</span></a>
+         	</li>
+               <h:panelGrid columns="1">
+                   <p:commandButton value="Logout" action="#{loginController.logout}" style = "left:7%" />
+               </h:panelGrid>
   		</ul>
     	<div id = "content-wrapper" class="d-flex flex-column">
     		<div id='content'>

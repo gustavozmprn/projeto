@@ -18,8 +18,53 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
     template="/WEB-INF/templates/default.xhtml">
     <ui:define name="content">
+    	<div class = "container-fluid">
+			<h:form id="dialogs">
+	        	<p:growl id="messages"/>
+		        <p:dialog header="Nova Categoria" showEffect="fade" modal="true" widgetVar="usuarioDialog" responsive="true">   
+		            <p:outputPanel id="usuario-conteudo-dialog" class="ui-fluid">
+		                <p:outputPanel rendered="#{not empty categoriaProdutoController.novaCategoriaProduto}">
+		                    <div class="field">
+		                        <p:outputLabel for="nome">Nome</p:outputLabel>
+		                        <p:inputText id="nome" value="#{categoriaProdutoController.novaCategoriaProduto.nome}" required="true" />
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="descr">Descrição</p:outputLabel>
+		                        <p:inputText id="descr" value="#{categoriaProdutoController.novaCategoriaProduto.descricao}" required="true"/>
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="catrmae">Categoria Mãe</p:outputLabel>
+		                        <p:inputText id="catrmae" value="#{categoriaProdutoController.novaCategoriaProduto.categoriamae}"/>
+		                    </div>
+		                </p:outputPanel>
+		            </p:outputPanel>
+		
+		            <f:facet name="footer">
+	                	<p:commandButton value="Atualizar" icon="pi pi-pencil" actionListener="#{categoriaProdutoController.update()}"
+	                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cadastrar" icon="pi pi-check" actionListener="#{categoriaProdutoController.register()}"
+		                    update="usuario-conteudo-dialog dialogs:messages, dt-usuarios" process="usuario-conteudo-dialog @this" />
+		                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('usuarioDialog').hide()" class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>
+		        <p:confirmDialog widgetVar="removerUsuarioDialog" showEffect="fade" width="300"
+		            message="Desejar remover essa categoria?" header="Confirm" severity="warn">
+		            <p:commandButton value="Sim" icon="pi pi-check" actionListener="#{categoriaProdutoController.delete}"
+		                process="@this" oncomplete="PF('removerUsuarioDialog').hide()" update="dt-usuarios" />
+		            <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('removerUsuarioDialog').hide()" />
+		        </p:confirmDialog>
+	        </h:form>
+        <div class = "container-fluid">
+	        <h:form id="reg">
+	            <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{categoriaProdutoController.cadastrarCategoria}"
+	                update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('usuarioDialog').show()"
+	                styleClass="ui-button-success" style="margin-right: .5rem">
+	                <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	            </p:commandButton>
+    	<!--
         <h:form id="reg">
             <h2>Member Registration</h2>
             <p>Enforces annotation-based constraints defined on the
@@ -29,26 +74,57 @@
                 <h:outputLabel for="nome" value="Nome:" />
                 <h:inputText id="nome" value="#{categoriaProdutoController.novaCategoriaProduto.nome}" />
                 <h:message for="nome" errorClass="invalid" />
-                
-                <h:outputLabel for="qtd_itens" value="Qtd Itens: " />
-                <h:inputText id="qtd_itens" value="#{categoriaProdutoController.novaCategoriaProduto.qtd_itens}" />
-                <h:message for="qtd_itens" errorClass="invalid" />
-                
+
 				<h:outputLabel for="descr" value="Descrição:" />
                 <h:inputText id="descr" value="#{categoriaProdutoController.novaCategoriaProduto.descricao}" />
                 <h:message for="descr" errorClass="invalid" />
             </h:panelGrid>
-
+		-->
             <p>
                 <h:panelGrid columns="2">
                     <h:commandButton id="register"
                         action="#{categoriaProdutoController.register()}"
-                        value="Register" styleClass="register" />
+                        value="Register" styleClass="register" style = "display:none" />
                     <h:messages styleClass="messages"
                         errorClass="invalid" infoClass="valid"
                         warnClass="warning" globalOnly="true" />
                 </h:panelGrid>
             </p>
+            </h:form>
+			<div class="card shadow mb-4">
+ 		        <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Categorias</h6>
+                </div>
+		        <div class = "table-responsive">
+					<p:dataTable id="dt-usuarios" widgetVar="dtUsuarios" var="us" value="#{categoriaProdutoController.listaCategoriasProdutos}" reflow="true" rows="5" paginator="true">
+				            <f:facet name="header">
+				            </f:facet>
+				
+				            <p:column headerText="Nome" sortBy="#{us.nome}">
+				                <h:outputText value="#{us.nome}" />
+				            </p:column>
+				            <p:column headerText="Descrição">
+				                <h:outputText value="#{us.descricao}" />
+				            </p:column>
+				            <p:column headerText="Categoria Mãe">
+				                <h:outputText value="#{us.categoriamae}" />
+				            </p:column>
+				            <p:column>
+           		                <p:commandButton icon="pi pi-pencil" update=":dialogs:usuario-conteudo-dialog" 
+	                    			oncomplete="PF('usuarioDialog').show()" action="#{categoriaProdutoController.update}"
+	                    			styleClass="edit-button rounded-button ui-button-success" process="@this">
+	                   				<f:setPropertyActionListener value="#{us}" target="#{categoriaProdutoController.novaCategoriaProduto}" />
+	                    			<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	                			</p:commandButton>
+	                			<p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+	                                 process="@this" oncomplete="PF('removerUsuarioDialog').show()">
+	                    			<f:setPropertyActionListener value="#{us}" target="#{categoriaProdutoController.novaCategoriaProduto}" />
+	                			</p:commandButton>
+				            </p:column>
+				     </p:dataTable>
+			    </div>
+		    </div>
+        <!--
         </h:form>
          
         <h2>Categorias de Produtos</h2>
@@ -63,14 +139,12 @@
                 #{categoriaProduto.nome}
             </h:column>
             <h:column>
-                <f:facet name="header">Quantidade de Itens</f:facet>
-                #{categoriaProduto.qtd_itens}
-            </h:column>
-            <h:column>
                 <f:facet name="header">Descrição</f:facet>
                 #{categoriaProduto.descricao}
             </h:column>
        	</h:dataTable>
-        
+         -->
+         </div>
+         </div>
     </ui:define>
 </ui:composition>
