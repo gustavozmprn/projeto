@@ -74,113 +74,149 @@
 	            </p:outputPanel>
 	
 	            <f:facet name="footer">
-	                <p:commandButton value="Salvar" icon="pi pi-check" actionListener="#{funcionarioController.register}"
+	                <p:commandButton value="Salvar" icon="pi pi-check" actionListener="#{funcionarioController.register()}"
 	                    update="usuario-conteudo-dialog dialogs:messages" process="usuario-conteudo-dialog @this" />
 	                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('usuarioDialog').hide()" class="ui-button-secondary" type="button" />
 	            </f:facet>
 	        </p:dialog>
         </h:form>     
-        <h:form id="reg">
-            <p:toolbar>
-	            <p:toolbarGroup>
-	                <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{funcionarioController.novoCadastro}"
-	                    update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('usuarioDialog').show()"
-	                    styleClass="ui-button-success" style="margin-right: .5rem">
-	                    <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
-	                </p:commandButton>
-	            </p:toolbarGroup>
-	        </p:toolbar>
-<!--
-            <h:panelGrid columns="3" columnClasses="titleCell">
-                <h:outputLabel for="username" value="Username:" />
-                <h:inputText id="username" value="#{funcionarioController.novoFuncionario.username}" />
-                <h:message for="username" errorClass="invalid" />
-
-                <h:outputLabel for="name" value="Nome: " />
-                <h:inputText id="name" value="#{funcionarioController.novoFuncionario.nome}" />
-                <h:message for="name" errorClass="invalid" />
-                
-                <h:outputLabel for="email" value="Email:" />
-                <h:inputText id="email" value="#{funcionarioController.novoFuncionario.email}" />
-                <h:message for="email" errorClass="invalid" />
-
-				<h:outputLabel for="senha" value="Senha:" />
-                <h:inputSecret id="senha" value="#{funcionarioController.novoFuncionario.senha}" />
-                <h:message for="senha" errorClass="invalid" />
-                
-				<h:outputLabel for="telefone" value="Telefone:" />
-                <h:inputText id="telefone" value="#{funcionarioController.novoFuncionario.telefone}" />
-                <h:message for="telefone" errorClass="invalid" />
-  
-  				<h:outputLabel for="CEP" value="CEP:" />
-                <h:inputText id="CEP" value="#{funcionarioController.novoFuncionario.CEP}" />
-                <h:message for="CEP" errorClass="invalid" />
-				
-				<h:outputLabel for="logradouro" value="Logradouro:" />
-                <h:inputText id="logradouro" value="#{funcionarioController.novoFuncionario.logradouro}" />
-                <h:message for="logradouro" errorClass="invalid" />
-                
-				<h:outputLabel for="numero_endrc" value="Numero Endereço:" />
-                <h:inputText id="numero_endrc" value="#{funcionarioController.novoFuncionario.numero_endrc}" />
-                <h:message for="numero_endrc" errorClass="invalid" />
-                
-				<h:outputLabel for="complemento" value="Complemento:" />
-                <h:inputText id="complemento" value="#{funcionarioController.novoFuncionario.complemento}" />
-                <h:message for="complemento" errorClass="invalid" />
-            </h:panelGrid>
--->
-            <p>
-                <h:panelGrid columns="2">
-                    <h:commandButton id="register"
-                        action="#{funcionarioController.register()}"
-                        value="Register" styleClass="register" />
-                    <h:messages styleClass="messages"
-                        errorClass="invalid" infoClass="valid"
-                        warnClass="warning" globalOnly="true" />
-                </h:panelGrid>
-            </p>
-        </h:form>
-         
-        <h2>Funcionários</h2>
-        <h:panelGroup rendered="#{empty funcionarioController.listaFuncionarios}">
-            <em>Sem funcionários registrados</em>
-        </h:panelGroup>
-        <h:dataTable var="funcionario" value="#{funcionarioController.listaFuncionarios}"
-            rendered="#{not empty funcionarioController.listaFuncionarios}"
-            styleClass="simpletablestyle">
-            <h:column>
-                <f:facet name="header">Username</f:facet>
-                #{funcionario.username}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Senha</f:facet>
-                #{funcionario.senha}
-            </h:column>
-            <h:column>
-                <f:facet name="header">E-mail</f:facet>
-                #{funcionario.email}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Telefone</f:facet>
-                #{funcionario.telefone}
-            </h:column>
-            <h:column>
-                <f:facet name="header">CEP</f:facet>
-                #{funcionario.CEP}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Logradouro</f:facet>
-                #{funcionario.logradouro}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Numero</f:facet>
-                #{funcionario.numero_endrc}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Complemento</f:facet>
-                #{funcionario.complemento}
-            </h:column>
-       	</h:dataTable>
+        <div class = "container-fluid">
+	        <h:form id="reg">
+	            <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{funcionarioController.novoCadastro}"
+	                update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('usuarioDialog').show()"
+	                styleClass="ui-button-success" style="margin-right: .5rem">
+	                <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+	            </p:commandButton>
+	<!--
+	            <h:panelGrid columns="3" columnClasses="titleCell">
+	                <h:outputLabel for="username" value="Username:" />
+	                <h:inputText id="username" value="#{funcionarioController.novoFuncionario.username}" />
+	                <h:message for="username" errorClass="invalid" />
+	
+	                <h:outputLabel for="name" value="Nome: " />
+	                <h:inputText id="name" value="#{funcionarioController.novoFuncionario.nome}" />
+	                <h:message for="name" errorClass="invalid" />
+	                
+	                <h:outputLabel for="email" value="Email:" />
+	                <h:inputText id="email" value="#{funcionarioController.novoFuncionario.email}" />
+	                <h:message for="email" errorClass="invalid" />
+	
+					<h:outputLabel for="senha" value="Senha:" />
+	                <h:inputSecret id="senha" value="#{funcionarioController.novoFuncionario.senha}" />
+	                <h:message for="senha" errorClass="invalid" />
+	                
+					<h:outputLabel for="telefone" value="Telefone:" />
+	                <h:inputText id="telefone" value="#{funcionarioController.novoFuncionario.telefone}" />
+	                <h:message for="telefone" errorClass="invalid" />
+	  
+	  				<h:outputLabel for="CEP" value="CEP:" />
+	                <h:inputText id="CEP" value="#{funcionarioController.novoFuncionario.CEP}" />
+	                <h:message for="CEP" errorClass="invalid" />
+					
+					<h:outputLabel for="logradouro" value="Logradouro:" />
+	                <h:inputText id="logradouro" value="#{funcionarioController.novoFuncionario.logradouro}" />
+	                <h:message for="logradouro" errorClass="invalid" />
+	                
+					<h:outputLabel for="numero_endrc" value="Numero Endereço:" />
+	                <h:inputText id="numero_endrc" value="#{funcionarioController.novoFuncionario.numero_endrc}" />
+	                <h:message for="numero_endrc" errorClass="invalid" />
+	                
+					<h:outputLabel for="complemento" value="Complemento:" />
+	                <h:inputText id="complemento" value="#{funcionarioController.novoFuncionario.complemento}" />
+	                <h:message for="complemento" errorClass="invalid" />
+	            </h:panelGrid>
+	-->
+	            <p style = "display:none">
+	                <h:panelGrid columns="2">
+	                    <h:commandButton id="register"
+	                        action="#{funcionarioController.register()}"
+	                        value="Register" styleClass="register" style = "display:none"/> 
+	                    <h:messages styleClass="messages"
+	                        errorClass="invalid" infoClass="valid"
+	                        warnClass="warning" globalOnly="true" />
+	                </h:panelGrid>
+	            </p>
+	
+	        </h:form>
+	        <!-- 
+	        <div class = "table-responsive">
+				<p:dataTable id="dt-usuarios" widgetVar="dtUsuarios" var="us" value="#{funcionarioController.listaFuncionarios}" styleClass="table table-bordered">
+			            <f:facet name="header">
+			                <div>
+			                    <span style="font-weight: bold">Funcionários</span>
+			                </div>
+			            </f:facet>
+			
+			            <p:column headerText="Usuário" sortBy="#{us.username}">
+			                <h:outputText value="#{us.username}" />
+			            </p:column>
+			            <p:column headerText="Nome">
+			                <h:outputText value="#{us.nome}" />
+			            </p:column>
+			            <p:column headerText="E-Mail">
+			                <h:outputText value="#{us.email}" />
+			            </p:column>
+			            <p:column headerText="Telefone">
+			                <h:outputText value="#{us.telefone}" />
+			            </p:column>
+			            <p:column headerText="CEP">
+			                <h:outputText value="#{us.CEP}" />
+			            </p:column>
+			            <p:column headerText="Logradouro">
+			                <h:outputText value="#{us.logradouro}" />
+			            </p:column>
+			            <p:column headerText="Numero Endrc.">
+			                <h:outputText value="#{us.numero_endrc}" />
+			            </p:column>
+			            <p:column headerText="Complemento">
+			                <h:outputText value="#{us.complemento}" />
+			            </p:column>
+			     </p:dataTable>
+		    </div>
+		     -->
+			<div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Funcionários</h6>
+                </div>
+		        <h:panelGroup rendered="#{empty funcionarioController.listaFuncionarios}">
+		            <em>Sem funcionários registrados</em>
+		        </h:panelGroup>
+		        <div class = "table-responsive">
+			        <h:dataTable var="funcionario" value="#{funcionarioController.listaFuncionarios}"
+			            rendered="#{not empty funcionarioController.listaFuncionarios}"
+			            styleClass="table table-bordered">
+			            <h:column>
+			                <f:facet name="header">Username</f:facet>
+			                #{funcionario.username}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">E-mail</f:facet>
+			                #{funcionario.email}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">Telefone</f:facet>
+			                #{funcionario.telefone}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">CEP</f:facet>
+			                #{funcionario.CEP}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">Logradouro</f:facet>
+			                #{funcionario.logradouro}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">Numero</f:facet>
+			                #{funcionario.numero_endrc}
+			            </h:column>
+			            <h:column>
+			                <f:facet name="header">Complemento</f:facet>
+			                #{funcionario.complemento}
+			            </h:column>
+			       	</h:dataTable>
+		       	</div>
+	       	</div>
+       	</div>
      </div>
     </ui:define>
 </ui:composition>
